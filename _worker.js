@@ -5,8 +5,6 @@ const Config = {
     jsdelivr: 0
 }
 
-const whiteList = [] // 白名单
-
 // 原始 gh-proxy 的正则表达式
 const exp1 = /^(?:https?:\/\/)?github\.com\/.+?\/.+?\/(?:releases|archive)\/.*$/i
 const exp2 = /^(?:https?:\/\/)?github\.com\/.+?\/.+?\/(?:blob|raw)\/.*$/i
@@ -38,8 +36,7 @@ export default {
 
         let path = url.pathname.substring(PREFIX.length);
         
-        // Cloudflare Pages/Workers 会把 URL 路径中的 // 合并为 /
-        // 所以我们需要手动修复 https://... 变为 https:/... 的问题
+        // 修复 https://... 变为 https:/... 的问题
         if (path.startsWith('https/')) {
             path = 'https://' + path.substring('https/'.length);
         } else if (path.startsWith('http/')) {
@@ -54,9 +51,9 @@ export default {
             return handleProxy(request, path);
         }
 
-        // 如果不是代理请求（比如访问首页 /），则交由 Pages 的静态文件处理器处理
-        // 它会自动找到并返回项目中的 index.html
-        return context.next();
+        // 【关键修改】如果不是代理请求，则直接从项目中获取静态资源 (index.html 等)
+        // 这会避免无限循环并正确地返回你的主页
+        return env.ASSETS.fetch(request);
     }
 }
 
@@ -65,7 +62,7 @@ async function handleProxy(request, pathname) {
         return new Response(null, PREFLIGHT_INIT);
     }
     
-    let path = pathname
+    let path = pathname;
     if (path.search(exp2) === 0) {
         if (Config.jsdelivr) {
             const newUrl = path.replace('/blob/', '@').replace(/^(?:https?:\/\/)?github\.com/, 'https://cdn.jsdelivr.net/gh');
@@ -96,7 +93,6 @@ async function handleProxy(request, pathname) {
 
     if (res.status >= 300 && res.status < 400 && resHdrNew.has('location')) {
         const location = resHdrNew.get('location');
-        // 如果重定向地址是可代理的，则构造成我们自己的代理地址
         if (exp_list.some(exp => location.search(exp) === 0)) {
             resHdrNew.set('location', PREFIX + location);
         }
