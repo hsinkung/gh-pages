@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 下载加速</title>
+    <style>
+        :root { 
+            --bg-color: #f9fafb; 
+            --text-color: #374151; 
+            --title-color: #111827;
+            --border-color: #e5e7eb; 
+            --primary: #2563eb; 
+            --primary-hover: #1d4ed8; 
+            --code-bg: #f3f4f6;
+        }
+        @media (prefers-color-scheme: dark) { 
+            :root { 
+                --bg-color: #111827; 
+                --text-color: #d1d5db; 
+                --title-color: #f9fafb;
+                --border-color: #374151; 
+                --primary: #3b82f6; 
+                --primary-hover: #60a5fa; 
+                --code-bg: #1f2937;
+            } 
+        }
+        
+        body { 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            margin: 0; 
+            padding: 2rem 1.5rem; /* 上下留白，左右适配手机 */
+            line-height: 1.6;
+        }
+        
+        .container { 
+            max-width: 700px; /* 加宽以容纳长链接 */
+            margin: 0 auto; 
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 { 
+            color: var(--title-color);
+            font-size: 2rem; 
+            margin-top: 0;
+            margin-bottom: 0.5rem; 
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #6b7280;
+        }
+
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .search-box {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 1rem; 
+            border: 2px solid var(--border-color); 
+            border-radius: 0.75rem; 
+            background-color: transparent; 
+            color: var(--title-color); 
+            font-size: 1.05rem; 
+            box-sizing: border-box; 
+            outline: none; 
+            transition: border-color 0.2s; 
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        input:focus { 
+            border-color: var(--primary); 
+        }
+
+        button { 
+            width: 100%; 
+            margin-top: 1rem;
+            padding: 1rem; 
+            background-color: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 0.75rem; 
+            font-size: 1.05rem; 
+            cursor: pointer; 
+            transition: background-color 0.2s; 
+            font-weight: 600; 
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover { background-color: var(--primary-hover); }
+
+        .docs {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+
+        .docs h2 {
+            color: var(--title-color);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .docs p { margin-bottom: 0.75rem; }
+
+        ul { 
+            padding-left: 1.5rem; 
+            margin-top: 0.5rem; 
+            margin-bottom: 1.5rem;
+        }
+        
+        li { margin-bottom: 0.5rem; }
+
+        code {
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85em;
+            word-break: break-all; /* 防止手机端长链接撑破屏幕 */
+            color: var(--primary);
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #6b7280;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GitHub 下载加速</h1>
+            <div class="subtitle">解决 GitHub 下载速度慢的困扰</div>
+        </header>
+
+        <div class="search-box">
+            <form id="proxy-form">
+                <input type="url" id="url-input" placeholder="粘贴 GitHub 链接 (releases / raw / 仓库地址)" required autocomplete="off">
+                <button type="submit">一键加速下载</button>
+            </form>
+        </div>
+
+        <main class="docs">
+            <h2>使用说明</h2>
+            <p>直接将 GitHub 的文件链接粘贴到上方输入框点击下载，或者手动拼接在当前域名前面。</p>
+            
+            <h2>合法输入示例</h2>
+            <ul>
+                <li><strong>Releases 源码:</strong> <code>https://github.com/.../archive/v0.1.0.tar.gz</code></li>
+                <li><strong>Releases 文件:</strong> <code>https://github.com/.../releases/download/v0.1.0/example.zip</code></li>
+                <li><strong>分支文件:</strong> <code>https://github.com/.../blob/master/filename</code></li>
+                <li><strong>Raw 文件:</strong> <code>https://raw.githubusercontent.com/.../refs/heads/master/index.js</code></li>
+                <li><strong>仓库打包:</strong> <code>https://github.com/.../archive/master.zip</code></li>
+            </ul>
+
+            <h2>命令行使用 (Git Clone)</h2>
+            <p>在终端中，直接在 git clone 命令的地址前加上本站域名：</p>
+            <ul>
+                <li><strong>标准 Clone:</strong> <code>git clone https://<span class="dynamic-host">ghproxy.com</span>/https://github.com/user/repo.git</code></li>
+                <li><strong>私有仓库 Clone:</strong> <code>git clone https://user:TOKEN@<span class="dynamic-host">ghproxy.com</span>/https://github.com/user/repo.git</code></li>
+            </ul>
+            
+            <h2>捐赠</h2>
+            <p>本服务不接受任何赞助。请赞助原项目开发者。</p>
+        </main>
+
+        <footer>
+            <p>本服务基于开源项目 <a href="https://github.com/hunshcn/gh-proxy" target="_blank" rel="noopener noreferrer">hunshcn/gh-proxy</a> 部署</p>
+        </footer>
+    </div>
+
+    <script>
+        // 处理表单提交
+        document.getElementById('proxy-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputUrl = document.getElementById('url-input').value.trim();
+            if (inputUrl) {
+                // 拼接当前域名和输入的 GitHub URL
+                const proxyUrl = window.location.origin + '/' + inputUrl;
+                window.open(proxyUrl, '_blank');
+            }
+        });
+
+        // 自动替换说明文档中的域名为当前 Pages 域名
+        const currentHost = window.location.host;
+        document.querySelectorAll('.dynamic-host').forEach(el => {
+            el.textContent = currentHost;
+        });
+    </script>
+</body>
+</html>
