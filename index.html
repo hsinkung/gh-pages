@@ -150,7 +150,7 @@
 
         <div class="search-box">
             <form id="proxy-form">
-                <input type="url" id="url-input" placeholder="粘贴 GitHub 链接 (releases / raw / 仓库地址)" required autocomplete="off">
+                <input type="url" id="url-input" placeholder="粘贴 GitHub 链接 (releases/raw/仓库地址)" required autocomplete="off">
                 <button type="submit">一键加速下载</button>
             </form>
         </div>
@@ -160,6 +160,7 @@
             <p>直接将 GitHub 的文件链接粘贴到上方输入框点击下载，或手动拼接在当前域名之后。</p>
             
             <h2>合法输入示例</h2>
+            <p>注意，不支持项目文件夹。</p>
             <ul>
                 <li><strong>Releases 源码:</strong> <code>https://github.com/.../archive/v0.1.0.tar.gz</code></li>
                 <li><strong>Releases 文件:</strong> <code>https://github.com/.../releases/download/v0.1.0/example.zip</code></li>
@@ -168,11 +169,13 @@
                 <li><strong>仓库打包:</strong> <code>https://github.com/.../archive/master.zip</code></li>
             </ul>
 
-            <h2>命令行使用 (Git Clone)</h2>
-            <p>在终端中，直接在 git clone 命令的地址前加上本站域名：</p>
+            <h2>命令行使用</h2>
+            <p>在终端中，直接在命令的地址前加上本站域名。</p>
             <ul>
-                <li><strong>标准 Clone:</strong> <code>git clone https://<span class="dynamic-host">ghproxy.com</span>/https://github.com/user/repo.git</code></li>
-                <li><strong>私有仓库 Clone:</strong> <code>git clone https://user:TOKEN@<span class="dynamic-host">ghproxy.com</span>/https://github.com/user/repo.git</code></li>
+                <li><strong>git clone:</strong> <code>git clone https://<span class="dynamic-host">ghproxy.com</span>/https://github.com/user/repo.git</code></li>
+                <li><strong>wget:</strong> <code>wget https://<span class="dynamic-host">ghproxy.com</span>/https://github.com/.../archive/refs/tags/v0.1.0.zip</code></li>
+                <li><strong>curl:</strong> <code>curl -LO https://<span class="dynamic-host">ghproxy.com</span>/https://github.com/.../archive/refs/tags/v0.1.0.zip</code></li>
+                <li><strong>私有仓库:</strong> <code>git clone https://user:TOKEN@<span class="dynamic-host">ghproxy.com</span>/https://github.com/user/repo.git</code></li>
             </ul>
             
             <h2>捐赠</h2>
@@ -180,7 +183,7 @@
         </main>
 
         <footer>
-            <p>本服务基于开源项目 <a href="https://github.com/hunshcn/gh-proxy" target="_blank" rel="noopener noreferrer">hunshcn/gh-proxy</a> 部署</p>
+            <p>本服务由 Cloudflare 驱动，基于开源项目 <a href="https://github.com/hunshcn/gh-proxy" target="_blank" rel="noopener noreferrer">hunshcn/gh-proxy</a> 部署</p>
         </footer>
     </div>
 
