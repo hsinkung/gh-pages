@@ -51,8 +51,8 @@ export default {
             return handleProxy(request, path);
         }
 
-        // 【关键修改】如果不是代理请求，则直接从项目中获取静态资源 (index.html 等)
-        // 这会避免无限循环并正确地返回你的主页
+        // 如果不是代理请求，则直接从项目中获取静态资源 (index.html 等)
+        // 避免无限循环并正确地返回主页
         return env.ASSETS.fetch(request);
     }
 }
